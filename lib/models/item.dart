@@ -5,8 +5,9 @@ class Item {
   final String seller;        // 판매자
   final int price;            // 가격
   final String location;      // 거래 지역
-  final int likes;            // 좋아요 수
+   int likes;            // 좋아요 수
   final int chats;            // 채팅 수
+  bool isLiked;               // 좋아요 여부
 
   Item({
     required this.title,
@@ -17,5 +18,6 @@ class Item {
     required this.location,
     required this.likes,
     required this.chats,
+    this.isLiked = false,
   });
 }

@@ -20,6 +20,7 @@ Future<List<Item>> loadItemsFromCsv() async {
       location: row[6].toString(),
       likes: int.tryParse(row[7].toString()) ?? 0,
       chats: int.tryParse(row[8].toString()) ?? 0,
+      isLiked: false,
     );
   }).toList();
 }

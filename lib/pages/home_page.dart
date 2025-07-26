@@ -29,13 +29,9 @@ class _HomePageState extends State<HomePage> {
     _scrollController.addListener(() {
       final offset = _scrollController.offset;
       if (offset > 10 && !_showFab) {
-        setState(() {
-          _showFab = true;
-        });
+        setState(() => _showFab = true);
       } else if (offset <= 10 && _showFab) {
-        setState(() {
-          _showFab = false;
-        });
+        setState(() => _showFab = false);
       }
     });
   }
@@ -78,16 +74,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF6FF),
       appBar: AppBar(
-        title: const Text('르탄동'),
+        title: const Align(alignment: Alignment.centerLeft, child: Text('르탄동')),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_none),
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('알림이 없습니다.')),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('알림이 없습니다.')));
             },
           ),
         ],
@@ -102,13 +97,16 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 final item = _items[index];
                 return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    final updatedItem = await Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => DetailPage(item: item),
-                      ),
+                      MaterialPageRoute(builder: (_) => DetailPage(item: item)),
                     );
+                    if (updatedItem != null) {
+                      setState(() {
+                        _items[index] = updatedItem;
+                      });
+                    }
                   },
                   onLongPress: () => _confirmDelete(index),
                   child: Container(
@@ -133,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: Image.asset(
                             item.imagePath,
-                            width: 100,
+                            width: 120,
                             height: 120,
                             fit: BoxFit.cover,
                           ),
@@ -148,10 +146,16 @@ class _HomePageState extends State<HomePage> {
                                   item.title,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
                                 ),
                                 const SizedBox(height: 4),
-                                Text(item.location, style: const TextStyle(color: Colors.grey)),
+                                Text(
+                                  item.location,
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
                                 const SizedBox(height: 4),
                                 Text(
                                   '${NumberFormat('#,###').format(item.price)} 원',
@@ -166,11 +170,22 @@ class _HomePageState extends State<HomePage> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      const Icon(Icons.chat_bubble_outline, size: 16),
+                                      const Icon(
+                                        Icons.chat_bubble_outline,
+                                        size: 16,
+                                      ),
                                       const SizedBox(width: 4),
                                       Text('${item.chats}'),
                                       const SizedBox(width: 8),
-                                      const Icon(Icons.favorite_border, size: 16),
+                                      Icon(
+                                        item.isLiked
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
+                                        color: item.isLiked
+                                            ? Colors.pink
+                                            : Colors.grey,
+                                        size: 16,
+                                      ),
                                       const SizedBox(width: 4),
                                       Text('${item.likes}'),
                                     ],
