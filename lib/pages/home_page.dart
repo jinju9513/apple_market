@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 onTap: () {
-                  // TODO: 상세페이지로 이동
+                  
                 },
               );
             },
